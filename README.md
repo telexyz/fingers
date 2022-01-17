@@ -94,8 +94,19 @@ Tạo 3 loại nodes:
 ### Trigram Map & Filter
 
 Dùng trigram để cân bằng giữa độ chính xác và số lượng gram count phải lưu trữ:
-count=1 => `11_391_603` 3-grams => 13mb BinaryFuse(u8)
-count=2 => ` 2_474_876` 3-grams =>  6mb BinaryFuse(u16)
-remains => ` 4_333_131` 3-grams => 37mb (2^22=4_194_304)
+count=1 => `11_391_603` 3-grams => `13mb BinaryFuse(u8)`
+count=2 => ` 2_474_876` 3-grams => ` 6mb BinaryFuse(u16)`
+remains => ` 4_333_131` 3-grams => `24mb HashCount`(2^22 x 6-bytes)
+TOTAL: 43MB
+
+Tách kỹ hơn nữa ta được:
+count=1 => `11_391_603` 3-grams => `13mb BinaryFuse(u8)`
+count=2 => ` 2_474_876` 3-grams => ` 6mb BinaryFuse(u16)`
+count=3 => ` 1_091_039` 3-grams => ` 3mb BinaryFuse(u16)`
+count=4 => `   630_784` 3-grams => ` 2mb BinaryFuse(u16)`
+remains => ` 2_621_246` 3-grams => `12mb HashCount`(2^21 x 6-bytes)
+TOTAL: 36MB
+
+=> !! Chọn cách tách nào có lợi cho cache hơn !!
 
 ## Module 3d/ Sửa lỗi chính tả, lỗi cú pháp dùng rule-based
