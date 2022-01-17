@@ -8,14 +8,14 @@ https://wasm4.org/docs/#why-wasm-4
 __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự to load xuống local khó trôi nên cần sử dụng những models có dung lượng nhỏ (vài tới vài chục MB) => Full n-gram không thích hợp. Các lựa chọn khác bao gồm:
 
 * Pattern matching (vài trăm kb)
-* Rule-based
-* Pointwise
+* Rule-based (can be hard coded)
+* Pointwise (SVM in JavaScript?)
 * Selected n-gram (chỉ trigram chẳng hạn (36-43mb))
-* Neural Network
+* Neural Network (ONNX Runtime Web)
 
 - - -
 
-# Stage-3
+# Stage-3: Wasm deploy
 
 ## Module 3a/ Làm giao diện web để có đất thử nghiệm bộ gõ
 * Sử dụng `simple.css` https://raw.githubusercontent.com/kevquirk/simple.css/main/simple.css
