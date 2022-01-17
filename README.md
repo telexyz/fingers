@@ -18,7 +18,7 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự to load xuống local khó
 # Stage-3
 
 ## Module 3a/ Làm giao diện web để có đất thử nghiệm bộ gõ
-* Sử dụng `simple.css`
+* Sử dụng `simple.css` https://raw.githubusercontent.com/kevquirk/simple.css/main/simple.css
 * Tách phần code từ `stp/e` ra để có ngay một bộ gõ đơn giản, có các tính năng nâng cao ở dạng prototye và cải tiến từ đấy
 
 
