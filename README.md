@@ -100,16 +100,19 @@ Dùng trigram để cân bằng giữa độ chính xác và số lượng gram 
 count=1 => `10_956_634` 3-grams => `12mb BinaryFuse(u8)`
 count=2 => ` 2_345_545` 3-grams => ` 5mb BinaryFuse(u16)`
 remains => ` 4_000_183` 3-grams => `24mb HashCount`(2^22 x 6-bytes)
-TOTAL: 41MB
+TOTAL: 41MB,
+=> Mỗi lookup cần đối chiếu với 2 filters và 1 hash_count. Cách này cân bằng giữa MEM và CPU!
+
 
 Tách kỹ hơn nữa ta được:
 count=1 => `10_956_634` 3-grams => `12mb BinaryFuse(u8)` (`10_956_634*9/(8*1024*1024)`)
 count=2 => ` 2_345_545` 3-grams => ` 5mb BinaryFuse(u16)`(`2_345_545*18/(8*1024*1024)`)
 count=3 => ` 1_024_192` 3-grams => ` 2mb BinaryFuse(u16)`
 count=4 => `   589_105` 3-grams => ` 1mb BinaryFuse(u16)`
-remains => ` 2_386_886` 3-grams => `12mb HashCount`(2^21 x 6-bytes)
-TOTAL: 34MB
-
-=> !! Chọn cách tách nào có lợi cho cache hơn, rồi tới việc impl đơn giản hơn !!
+count=5 => `   383_368` 3-grams => ` 1mb BinaryFuse(u16)`
+remains => ` 2_003_518` 3-grams => `12mb HashCount`(2^21 x 6-bytes)
+TOTAL: 35MB,
+=> Mỗi lookup cần đối chiếu với 5 filters và 1 hash_count. Tốn CPU gấp đôi!
+_NOTE_: Có thể nhóm count=2,3 và count=4,5 vào một filter để tiết kiệt thời gian lookup!
 
 ## Module 3d/ Sửa lỗi chính tả, lỗi cú pháp dùng rule-based
