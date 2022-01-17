@@ -18,8 +18,17 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự to load xuống local khó
 # Stage-3: Wasm deploy
 
 ## Module 3a/ Làm giao diện web để có đất thử nghiệm bộ gõ
-* Sử dụng `simple.css` https://raw.githubusercontent.com/kevquirk/simple.css/main/simple.css
+
+[>> DOING <<]
+
 * Tách phần code từ `stp/e` ra để có ngay một bộ gõ đơn giản, có các tính năng nâng cao ở dạng prototye và cải tiến từ đấy
+
+[>> DONE <<]
+
+* Sử dụng `simple.css` https://raw.githubusercontent.com/kevquirk/simple.css/main/simple.css
+
+
+- - -
 
 
 ## Module 3b/ Triển khai bộ viet_tknz to wasm
@@ -33,6 +42,13 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự to load xuống local khó
 * Dùng từ điển để làm `syllables2words`
 * Dùng từ điển để gợi ý sửa lỗi chính tả
 * Phân tích nhanh văn bản để hiểu được patterns người dùng thường gõ là gì
+
+## Module 3d/ Sửa lỗi chính tả, lỗi cú pháp dùng rule-based
+
+
+- - -
+
+## PHỤ LỤC
 
 ### 3c.1: Dữ liệu từ điển âm tiết tiếng Việt
 
@@ -100,7 +116,9 @@ Dùng trigram để cân bằng giữa độ chính xác và số lượng gram 
 count=1 => `10_956_634` 3-grams => `12mb BinaryFuse(u8)`
 count=2 => ` 2_345_545` 3-grams => ` 5mb BinaryFuse(u16)`
 remains => ` 4_000_183` 3-grams => `24mb HashCount`(2^22 x 6-bytes)
+
 TOTAL: 41MB,
+
 => Mỗi lookup cần đối chiếu với 2 filters và 1 hash_count. Cách này cân bằng giữa MEM và CPU!
 
 
@@ -111,8 +129,8 @@ count=3 => ` 1_024_192` 3-grams => ` 2mb BinaryFuse(u16)`
 count=4 => `   589_105` 3-grams => ` 1mb BinaryFuse(u16)`
 count=5 => `   383_368` 3-grams => ` 1mb BinaryFuse(u16)`
 remains => ` 2_003_518` 3-grams => `12mb HashCount`(2^21 x 6-bytes)
+
 TOTAL: 35MB,
+
 => Mỗi lookup cần đối chiếu với 5 filters và 1 hash_count. Tốn CPU gấp đôi!
 _NOTE_: Có thể nhóm count=2,3 và count=4,5 vào một filter để tiết kiệt thời gian lookup!
-
-## Module 3d/ Sửa lỗi chính tả, lỗi cú pháp dùng rule-based
