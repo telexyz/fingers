@@ -5,11 +5,12 @@ https://wasm4.org/docs/#why-wasm-4
 > on the essential, it becomes easier to start and finish developing a game. This is in 
 > contrast to large game engines, which can be daunting and distracting.
 
-__NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự to load xuống local khó trôi nên cần sử dụng những models có dung lượng nhỏ (vài MB) => n-gram không thích hợp. Các lựa chọn khác bao gồm:
+__NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự to load xuống local khó trôi nên cần sử dụng những models có dung lượng nhỏ (vài tới vài chục MB) => Full n-gram không thích hợp. Các lựa chọn khác bao gồm:
 
-* Pattern matching
+* Pattern matching (vài trăm kb)
 * Rule-based
 * Pointwise
+* Selected n-gram (chỉ trigram chẳng hạn (36-43mb))
 * Neural Network
 
 - - -
