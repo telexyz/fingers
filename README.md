@@ -9,8 +9,8 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự to load xuống local khó
 
 * Pattern matching (vài trăm kb)
 * Rule-based (can be hard coded)
-* Pointwise (SVM in JavaScript?)
-* Selected n-gram (chỉ trigram chẳng hạn (36-43mb))
+* Pointwise
+* Selected n-gram (chỉ trigram chiếm 36-43mb)
 * Neural Network (ONNX Runtime Web)
 
 - - -
