@@ -1,3 +1,3 @@
-https://viewsourcecode.org/snaptoken/kilo/
+fork from https://github.com/paulsmith/texteditor-zig
 
-If using macOS, requires at least Zig git checkout a021c7b1.
+follow steps from https://viewsourcecode.org/snaptoken/kilo

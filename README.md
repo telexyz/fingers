@@ -1,7 +1,3 @@
-
-
-- - -
-
 # Stage-3: Wasm deploy
 
 ## Benefit of Wasm
@@ -11,7 +7,7 @@
 > contrast to large game engines, which can be daunting and distracting.
 https://wasm4.org/docs/#why-wasm-4
 
-__NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự to load xuống local khó trôi nên cần sử dụng những models có dung lượng nhỏ (vài tới vài chục MB) => Full n-gram không thích hợp. Các lựa chọn khác bao gồm:
+__NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó trôi nên cần sử dụng những models có dung lượng nhỏ (vài tới vài chục MB). Full n-gram chiếm vài trăm MB không còn thích hợp. Các lựa chọn khác bao gồm:
 
 * Pattern matching (vài trăm kb)
 * Rule-based (can be hard coded)
@@ -19,15 +15,12 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự to load xuống local khó
 * Selected n-gram (chỉ trigram chiếm 36-43mb)
 * Neural Network (ONNX Runtime Web)
 
-
 ## THE UGLY TRUTH OF WASM
 
-Thời gian gọi hàm + trao đổi data giữa wasm và js chậm như rùa
-
-Chưa tìm được cách load data ngoàimột cách hiệu quả
+* Thời gian gọi hàm + trao đổi data giữa wasm và js chậm như rùa
+* Chưa tìm được cách load data ngoàimột cách hiệu quả
 
 => !!! Bước đệm triển khai những gì sẽ triển khai cho wasm trên một TextEditor đơn giản viết bằng Zig !!!
-
 
 ## Module 3a/ Làm giao diện web để có đất thử nghiệm bộ gõ
 
