@@ -1,9 +1,15 @@
-# Benefit of Wasm
-https://wasm4.org/docs/#why-wasm-4
+
+
+- - -
+
+# Stage-3: Wasm deploy
+
+## Benefit of Wasm
 
 > force developers to work within tech and design limitations. by removing excess and focusing 
 > on the essential, it becomes easier to start and finish developing a game. This is in 
 > contrast to large game engines, which can be daunting and distracting.
+https://wasm4.org/docs/#why-wasm-4
 
 __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự to load xuống local khó trôi nên cần sử dụng những models có dung lượng nhỏ (vài tới vài chục MB) => Full n-gram không thích hợp. Các lựa chọn khác bao gồm:
 
@@ -13,17 +19,25 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự to load xuống local khó
 * Selected n-gram (chỉ trigram chiếm 36-43mb)
 * Neural Network (ONNX Runtime Web)
 
-- - -
 
-# Stage-3: Wasm deploy
+## THE UGLY TRUTH OF WASM
+
+Thời gian gọi hàm + trao đổi data giữa wasm và js chậm như rùa
+
+Chưa tìm được cách load data ngoàimột cách hiệu quả
+
+=> !!! Bước đệm triển khai những gì sẽ triển khai cho wasm trên một TextEditor đơn giản viết bằng Zig !!!
+
 
 ## Module 3a/ Làm giao diện web để có đất thử nghiệm bộ gõ
 
 [>> DOING <<]
 
-* Tách phần code từ `stp/e` ra để có ngay một bộ gõ đơn giản, có các tính năng nâng cao ở dạng prototye và cải tiến từ đấy
+* Viết texteditor https://viewsourcecode.org/snaptoken/kilo
 
 [>> DONE <<]
+
+* Tách phần code từ `stp/e` ra để có ngay một bộ gõ đơn giản, có các tính năng nâng cao ở dạng prototye và cải tiến từ đấy
 
 * Sử dụng `simple.css` https://raw.githubusercontent.com/kevquirk/simple.css/main/simple.css
 
