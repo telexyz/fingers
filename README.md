@@ -1,4 +1,4 @@
-# Stage-3: Wasm deploy
+# Deploy to Wasm / TextEditor / Bộ gõ
 
 ## Benefit of Wasm
 
@@ -29,7 +29,7 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 * Viết texteditor in Zig
   https://viewsourcecode.org/snaptoken/kilo
   https://github.com/Dubhead/kilo-zig
-  
+
 [>> DONE <<]
 
 * Tách phần code từ `stp/e` ra để có ngay một bộ gõ đơn giản, có các tính năng nâng cao ở dạng prototye và cải tiến từ đấy
