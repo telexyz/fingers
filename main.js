@@ -1,4 +1,4 @@
-import helloUrl from "./zig-out/lib/hello.wasm?url";
+import helloUrl from "./zig-out/lib/telexyz.wasm?url";
 import { instantiateStreaming, errors } from "@wapc/host";
 
 const response = await fetch(helloUrl);
