@@ -27,7 +27,7 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 * Pattern matching (vài trăm kb)
 * Rule-based (can be hard coded)
 * Pointwise
-* Selected n-gram (chỉ trigram chiếm 23-43mb)
+* Selected n-gram (chỉ trigram chiếm 23-43mb, 2,3,4-gram lưu thô chiếm 74mb)
 * Neural Network (ONNX Runtime Web)
 
 ## Module 3a/ Làm giao diện web để có đất thử nghiệm bộ gõ
