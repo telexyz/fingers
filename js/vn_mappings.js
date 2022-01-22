@@ -10,7 +10,7 @@ export let _mappings = {
 "thay thay": "thầy thấy|thấy thầy|thấy thay|thầy thầy|thấy thấy",
 "day chung": "đây chúng|dạy chúng|đấy chúng|dậy chúng|đẩy chúng",
 "la tinh": "là tinh|là tình|là tỉnh|là tính|là tĩnh|là tịnh",
-"thay day": "thầy dạy|thấy đấy|thấy đây|thầy dậy|thấy đầy",
+"thay day": "thầy dạy|thấy đấy|thấy đây|thấy đầy",
 "minh day": "mình đấy|mình dạy|mình đầy|mình đẩy|mình đây",
 "day minh": "đây mình|đấy mình|đẩy mình|dậy mình|dạy mình",
 "nguoi cung": "người cũng|người cùng|người cúng|người cung",
