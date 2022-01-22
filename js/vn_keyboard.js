@@ -1,5 +1,4 @@
 import * as CursorHelpers from "./cursor_helpers.js"
-import * as AudioPlayer from "./audio_player.js"
 import * as VnHelpers from "./vn_helpers.js"
 import { _mappings } from "./vn_mappings.js"
 import * as TypedText from "./typed_text.js"
@@ -33,8 +32,8 @@ async function mapKeysForMe(event) {
 
     var s = window.getSelection();
     let i = s.anchorOffset;
-    var p = document.getElementById(currSubIndex);
-    var t = p.innerText;
+    var p = document.getElementById('texteditor');
+    var t = p.textContent;
     let c1 = event.keyCode == 32 ? 32 : t.charCodeAt(i-1);
     let c2 = prevC;
     prevC = c1;
@@ -107,9 +106,8 @@ async function mapKeysForMe(event) {
     if (c1 === 32 || c1 === 160) { // Android space char code is 160
         if (c2 === 32 || c2 === 160) { // Double-space
             console.log(" > > Double spaces < <");
-            CursorHelpers.pauseOrPlayCurrPos(); 
         }
-        CursorHelpers.resetTextAndPos();
+        // CursorHelpers.resetTextAndPos();
         return;
     }    
 

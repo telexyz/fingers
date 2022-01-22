@@ -1,4 +1,3 @@
-import * as Estimators from "./estimators.js";
 import * as TypedText from "./typed_text.js"
 import * as VnHelpers from "./vn_helpers.js"
 
@@ -14,10 +13,6 @@ export function getCursorback(from) {
     lastCurrPos = n;
   }
   collapse(window.getSelection(), p.firstChild, lastCurrPos);
-}
-
-export async function playCurrPos() {
-  playCurrSubIndex(await Estimators.getCurrDelta());
 }
 
 export function getLastCurrPos() {
@@ -55,7 +50,7 @@ export function collapse(sel, elem, n) {
 export function resetTextAndPos() {
     // Reset HTML to plain text to select correct cursor position
     var sel = window.getSelection();
-    var currP = document.getElementById(currSubIndex);
+    var currP = document.getElementById('texteditor');
     var currInnerText = currP.innerText;
 
     let isEndOfSent = lastCurrPos >= currInnerText.length;
@@ -69,10 +64,6 @@ export function resetTextAndPos() {
 
     currInnerText = normText + remain;
     lastCurrPos = normText.length;
-
-    if (autoCapitalizedFirstCharOf(currP, false)) {
-      currInnerText = capitalizeFirstCharOf(currInnerText);
-    }
 
     let n = currInnerText.length;
     if (isEndOfSent || lastCurrPos > n) {
@@ -141,17 +132,4 @@ export function blinkCurPos(pos) {
 function capitalizeFirstCharOf(sent) {
   if (typeof sent !== "string") { return " "; }
   return (sent[0] ?? "").toUpperCase() + sent.slice(1,);
-}
-
-function autoCapitalizedFirstCharOf(p, auto=false) {
-  let yesDoIt = (p.id == "0");
-  if (yesDoIt === false) {
-    let pp = p.parentNode.previousSibling.lastChild;
-    yesDoIt = pp.firstChild.textContent && pp.firstChild.textContent.match(/[.?!\\/]\s*$/);
-  }
-  // console.log('yesDoIt', yesDoIt);
-  if (auto && yesDoIt) {
-    p.firstChild.textContent = capitalizeFirstCharOf(p.innerText);
-  }
-  return yesDoIt;
 }

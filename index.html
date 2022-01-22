@@ -7,11 +7,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>FiveFingers</title>
   </head>
+
   <body>
     <div id="app"></div>
     <!-- <script type="module" src="/main.js"></script> -->
+
     <h1>Bộ gõ FiveFingers</h1>
-    <textarea type="text" rows="15" cols="100">Thử bộ gõ tại đâi!</textarea>
+
     <p>Có 1 lỗi chính tả</p>
+
+    <p id="texteditor" contentEditable=true>Thử bộ gõ tại đâi!<br />.<br />.</p>
+
+    <div class="header" id="suggestion" style="display: none;"></div>
   </body>
+
+<script src="./js/globals_helpers.js"></script>
+<script type="module">
+    import "./js/vn_keyboard.js";
+    document.getElementById("texteditor").focus();
+</script>
 </html>
