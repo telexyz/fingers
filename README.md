@@ -136,9 +136,9 @@ https://github.com/hexops/fastfilter#benchmarks
 
 Dùng trigram để cân bằng giữa độ chính xác và số lượng gram count phải lưu trữ:
 ```
-count=1 => `10_956_634` 3-grams => `12mb BinaryFuse(u8)`
-count=2 => ` 2_345_545` 3-grams => ` 5mb BinaryFuse(u16)`
-remains => ` 4_000_183` 3-grams => `24mb HashCount`(2^22 x 6-bytes)
+count=1 => `10_956_634` 3-grams => `12mb BinaryFuse(u8)`  (`x*9/(8*1024*1024)`)
+count=2 => ` 2_345_545` 3-grams => ` 5mb BinaryFuse(u16)` (`x*18/(8*1024*1024)`)
+remains => ` 4_000_183` 3-grams => `24mb HashCount`       (2^22 x 6-bytes)
 TOTAL: 41MB,
 ```
 => Mỗi lookup cần đối chiếu với 2 filters và 1 hash_count. Cách này cân bằng giữa MEM và CPU!
