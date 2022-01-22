@@ -1,31 +1,33 @@
 // syntax.zig
 
 pub const SyntaxFlags = enum(u16) {
-    HighlightNumbers = 1<<0,
-    HighlightStrings = 1<<1,
+    HighlightNumbers = 1 << 0,
+    HighlightStrings = 1 << 1,
 };
 
 pub const EditorSyntax = struct {
-    pub fileType: []const u8,
-    pub fileMatch: [][]const u8,
-    pub keywords: [][]const u8,
-    pub singlelineCommentStart: []const u8,
-    pub multilineCommentStart: []const u8,
-    pub multilineCommentEnd: []const u8,
-    pub flags: usize,
+    fileType: []const u8,
+    fileMatch: [][]const u8,
+    keywords: [][]const u8,
+    singlelineCommentStart: []const u8,
+    multilineCommentStart: []const u8,
+    multilineCommentEnd: []const u8,
+    flags: usize,
 };
 
 // HLDB (highlight database)
-pub const HLDB = [_]EditorSyntax {
-    EditorSyntax {
+pub const HLDB = [_]EditorSyntax{
+    EditorSyntax{
         .fileType = "c",
-        .fileMatch = [_][]u8{ ".c", ".h", ".cpp", },
+        .fileMatch = [_][]u8{
+            ".c",
+            ".h",
+            ".cpp",
+        },
         .keywords = [_][]u8{
-            "switch", "if", "while", "for", "break", "continue", "return",
-            "else", "struct", "union", "typedef", "static", "enum", "class",
-            "case",
-
-            "int|", "long|", "double|", "float|", "char|", "unsigned|",
+            "switch",  "if",     "while", "for",     "break",  "continue", "return",
+            "else",    "struct", "union", "typedef", "static", "enum",     "class",
+            "case",    "int|",   "long|", "double|", "float|", "char|",    "unsigned|",
             "signed|", "void|",
         },
         .singlelineCommentStart = "//",

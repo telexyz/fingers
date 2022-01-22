@@ -57,10 +57,10 @@ fn enableRawMode(cfg: *Config) TerminalError!void {
     }
     var raw: c.termios = cfg.orig_termios;
 
-    raw.c_iflag &= ~u16(c.BRKINT | c.ICRNL | c.INPCK | c.ISTRIP | c.IXON);
-    raw.c_oflag &= ~u16(c.OPOST);
-    raw.c_cflag |= u16(c.CS8);
-    raw.c_lflag &= ~u16(c.ECHO | c.ICANON | c.IEXTEN | c.ISIG);
+    raw.c_iflag &= @intCast(u16, c.BRKINT | c.ICRNL | c.INPCK | c.ISTRIP | c.IXON);
+    raw.c_oflag &= @intCast(u16, c.OPOST);
+    raw.c_cflag |= @intCast(u16, c.CS8);
+    raw.c_lflag &= @intCast(u16, c.ECHO | c.ICANON | c.IEXTEN | c.ISIG);
     raw.c_cc[c.VMIN] = 0;
     raw.c_cc[c.VTIME] = 1;
     ret = c.tcsetattr(os.STDIN_FILENO, c.TCSAFLUSH, &raw);
@@ -319,7 +319,7 @@ fn editorOpen(cfg: *Config, filename: []u8) !void {
     if (cfg.filename) |f| {
         allocator.free(f);
     }
-    cfg.filename = try std.mem.dupe(allocator, u8, filename);
+    cfg.filename = try allocator.dupe(u8, filename);
 
     try editorSelectSyntaxHighlight(cfg);
 
@@ -459,6 +459,7 @@ const AppendBuffer = struct {
     buf: []u8,
 
     pub fn init(cfg: *const Config) !AppendBuffer {
+        _ = cfg;
         const initial_size: usize = 32;
         return AppendBuffer{
             .buf = try allocator.alloc(u8, initial_size),
@@ -741,20 +742,20 @@ fn editorProcessKeypress(cfg: *Config) !void {
     switch (key) {
         '\r' => try editorInsertNewline(cfg),
 
-        comptime ctrl('q') => {
+        ctrl('q') => {
             if (cfg.dirty > 0 and quit_times > 0) {
                 try editorSetStatusMessage(cfg, "WARNING! File has unsaved changes. Press Ctrl-Q {} more times to quit.", quit_times);
                 quit_times -= 1;
                 return;
             }
 
-            const stdout_file = try std.io.getStdOut();
+            // const stdout_file = try std.io.getStdOut();
             _ = c.write(c.STDOUT_FILENO, "\x1b[2J", 4);
             _ = c.write(c.STDOUT_FILENO, "\x1b[H", 3);
             c.exit(0); // TODO
         },
 
-        comptime ctrl('s') => try editorSave(cfg),
+        ctrl('s') => try editorSave(cfg),
 
         @enumToInt(EditorKey.Home) => {
             cfg.cursorX = 0;
@@ -765,7 +766,7 @@ fn editorProcessKeypress(cfg: *Config) !void {
                 cfg.cursorX = cfg.rows.at(cfg.cursorY).len();
         },
 
-        comptime ctrl('f') => try editorFind(cfg),
+        ctrl('f') => try editorFind(cfg),
 
         @enumToInt(EditorKey.Backspace), @enumToInt(EditorKey.Backspace2), @enumToInt(EditorKey.Delete) => {
             if (key == @enumToInt(EditorKey.Delete)) {
@@ -794,7 +795,7 @@ fn editorProcessKeypress(cfg: *Config) !void {
 
         @enumToInt(EditorKey.ArrowUp), @enumToInt(EditorKey.ArrowDown), @enumToInt(EditorKey.ArrowLeft), @enumToInt(EditorKey.ArrowRight) => editorMoveCursor(cfg, key),
 
-        comptime ctrl('l'), @enumToInt(EditorKey.Esc) => {}, // TODO
+        ctrl('l'), @enumToInt(EditorKey.Esc) => {}, // TODO
 
         else => {
             try editorInsertChar(cfg, @intCast(u8, key));
@@ -823,7 +824,7 @@ fn initEditor(cfg: *Config) !void {
 fn main_sub() !u8 {
     // command line args
     var args_it = std.process.args();
-    const ego = try args_it.next(allocator).?;
+    // const ego = try args_it.next(allocator).?;
     const filename_opt: ?[]u8 =
         if (args_it.next(allocator)) |foo|
     blk: {
@@ -850,8 +851,10 @@ fn main_sub() !u8 {
 
 pub fn main() u8 {
     if (main_sub()) |v| {
+        _ = v;
         return 0;
     } else |err| {
+        _ = err;
         return 1;
     }
 }

@@ -13,13 +13,13 @@ const TAB_STOP = @import("defines.zig").TAB_STOP;
 const SyntaxFlags = @import("syntax.zig").SyntaxFlags;
 
 pub const Row = struct {
-    pub config: *Config,
+    config: *Config,
 
-    pub idx: usize, // my own index within the file
-    pub chars: []u8,
-    pub renderedChars: []u8,
-    pub hl: []EditorHighlight, // highlight
-    pub hl_open_comment: bool,
+    idx: usize, // my own index within the file
+    chars: []u8,
+    renderedChars: []u8,
+    hl: []EditorHighlight, // highlight
+    hl_open_comment: bool,
 
     pub fn init(cfg: *Config) !*Row {
         var foo: []Row = try allocator.alloc(Row, 1);
@@ -57,14 +57,13 @@ pub const Row = struct {
         allocator.free(self.renderedChars);
 
         var numTabs: usize = 0; // number of tabs in self.chars
-        for (self.chars) |ch, idx| {
+        for (self.chars) |ch| {
             if (ch == '\t') numTabs += 1;
         }
 
-        self.renderedChars = try allocator.alloc(u8,
-            self.chars.len + numTabs * (TAB_STOP - 1));
-        var idx_rchars: usize = 0;      // index into self.renderedChars
-        for (self.chars) |ch, idx_chars| {
+        self.renderedChars = try allocator.alloc(u8, self.chars.len + numTabs * (TAB_STOP - 1));
+        var idx_rchars: usize = 0; // index into self.renderedChars
+        for (self.chars) |ch| {
             if (ch == '\t') {
                 self.renderedChars[idx_rchars] = ' ';
                 idx_rchars += 1;
@@ -83,9 +82,7 @@ pub const Row = struct {
 
     pub fn updateSyntax(self: *Row) anyerror!void {
         self.hl = try allocator.realloc(self.hl, self.renderedChars.len);
-        std.mem.set(EditorHighlight,
-            self.hl,
-            EditorHighlight.Normal);
+        std.mem.set(EditorHighlight, self.hl, EditorHighlight.Normal);
 
         const syn = self.config.syntax orelse return;
 
@@ -112,9 +109,7 @@ pub const Row = struct {
             // single-line comment
             if (scs.len > 0 and in_string == 0 and !in_comment) {
                 if (std.mem.startsWith(u8, self.renderedChars[i..], scs)) {
-                    std.mem.set(EditorHighlight,
-                        self.hl[i..],
-                        .Comment);
+                    std.mem.set(EditorHighlight, self.hl[i..], .Comment);
                     break;
                 }
             }
@@ -124,9 +119,7 @@ pub const Row = struct {
                 if (in_comment) {
                     self.hl[i] = .MLComment;
                     if (std.mem.startsWith(u8, self.renderedChars[i..], mce)) {
-                        std.mem.set(EditorHighlight,
-                            self.hl[i .. i + mce.len],
-                            .MLComment);
+                        std.mem.set(EditorHighlight, self.hl[i .. i + mce.len], .MLComment);
                         i += mce.len;
                         in_comment = false;
                         prev_sep = true;
@@ -135,12 +128,8 @@ pub const Row = struct {
                         i += 1;
                         continue;
                     }
-                } else if (std.mem.startsWith(u8,
-                        self.renderedChars[i..],
-                        mcs)) {
-                    std.mem.set(EditorHighlight,
-                        self.hl[i .. i + mcs.len],
-                        .MLComment);
+                } else if (std.mem.startsWith(u8, self.renderedChars[i..], mcs)) {
+                    std.mem.set(EditorHighlight, self.hl[i .. i + mcs.len], .MLComment);
                     i += mcs.len;
                     in_comment = true;
                     continue;
@@ -174,9 +163,9 @@ pub const Row = struct {
             // numbers
             if (syn.flags & @enumToInt(SyntaxFlags.HighlightNumbers) > 0) {
                 if ((std.ascii.isDigit(ch) and
-                        (prev_sep or prev_hl == .Number)) or
-                    (ch == '.' and prev_hl == .Number)
-                ) {
+                    (prev_sep or prev_hl == .Number)) or
+                    (ch == '.' and prev_hl == .Number))
+                {
                     self.hl[i] = .Number;
                     i += 1;
                     prev_sep = false;
@@ -191,16 +180,11 @@ pub const Row = struct {
                     const kw2 = kw[klen - 1] == '|';
                     if (kw2) klen -= 1;
 
-                    if (std.mem.startsWith(u8,
-                            self.renderedChars[i..],
-                            kw[0..klen]) and
+                    if (std.mem.startsWith(u8, self.renderedChars[i..], kw[0..klen]) and
                         (i + klen == self.renderedChars.len or
-                            is_separator(self.renderedChars[i + klen])))
+                        is_separator(self.renderedChars[i + klen])))
                     {
-                        std.mem.set(EditorHighlight,
-                            self.hl[i .. i + klen],
-                            if (kw2) EditorHighlight.Keyword2
-                                else EditorHighlight.Keyword1);
+                        std.mem.set(EditorHighlight, self.hl[i .. i + klen], if (kw2) EditorHighlight.Keyword2 else EditorHighlight.Keyword1);
                         i += klen;
                         break;
                     }
@@ -232,7 +216,7 @@ pub const Row = struct {
     pub fn screenColumn(self: *Row, char_index: usize) u16 {
         var result: u16 = 0;
         var idx: u16 = 0; // index into self.chars
-        while (idx < char_index): (idx += 1) {
+        while (idx < char_index) : (idx += 1) {
             if (self.chars[idx] == '\t') {
                 result += (TAB_STOP - 1) - (result % TAB_STOP);
             }
@@ -248,7 +232,7 @@ pub const Row = struct {
     pub fn screenColToCharsIndex(self: *Row, scrCol: usize) u16 {
         var idx: u16 = 0; // index into self.renderedChars
         var result: u16 = 0;
-        while (result < self.chars.len): (result += 1) {
+        while (result < self.chars.len) : (result += 1) {
             if (self.chars[result] == '\t') {
                 idx += (TAB_STOP - 1) - (idx % TAB_STOP);
             }
@@ -263,9 +247,7 @@ pub const Row = struct {
     pub fn insertChar(self: *Row, insert_at: usize, ch: u8) !void {
         const at = std.math.min(insert_at, self.chars.len);
         self.chars = try allocator.realloc(self.chars, self.chars.len + 1);
-        std.mem.copyBackwards(u8,
-            self.chars[at + 1 .. self.chars.len],
-            self.chars[at .. self.chars.len - 1]);
+        std.mem.copyBackwards(u8, self.chars[at + 1 .. self.chars.len], self.chars[at .. self.chars.len - 1]);
         self.chars[at] = ch;
         try self.render();
     }
@@ -281,9 +263,7 @@ pub const Row = struct {
 
     pub fn delChar(self: *Row, at: usize) !void {
         if (at > self.len()) return;
-        std.mem.copy(u8,
-            self.chars[at .. self.chars.len - 1],
-            self.chars[at + 1 .. self.chars.len]);
+        std.mem.copy(u8, self.chars[at .. self.chars.len - 1], self.chars[at + 1 .. self.chars.len]);
         self.chars = self.chars[0 .. self.chars.len - 1];
         try self.render();
     }
