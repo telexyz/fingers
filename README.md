@@ -28,7 +28,7 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 
 * Viết texteditor in Zig
   https://viewsourcecode.org/snaptoken/kilo
-  https://github.com/Dubhead/kilo-zig
+  https://github.com/paulsmith/texteditor-zig/blob/main/src/main.zig
 
 [>> DONE <<]
 
