@@ -186,7 +186,7 @@ fn editorSelectSyntaxHighlight(cfg: *Config) !void {
             if (std.mem.endsWith(u8, filename, fm)) {
                 cfg.syntax = &hldb;
 
-                for (cfg.rows.toSlice()) |row| {
+                for (cfg.rows.items) |row| {
                     try row.updateSyntax();
                 }
 
@@ -208,7 +208,7 @@ fn editorInsertRow(cfg: *Config, at: usize, s: []const u8) !void {
     if (at > cfg.numRows) return;
 
     var r: *buffer.Row = try buffer.Row.initFromString(cfg, &s[0..]);
-    for (cfg.rows.toSlice()[at..]) |row| {
+    for (cfg.rows.items[at..]) |row| {
         row.idx += 1;
     }
 
@@ -323,15 +323,19 @@ fn editorOpen(cfg: *Config, filename: []u8) !void {
 
     try editorSelectSyntaxHighlight(cfg);
 
-    var file: std.fs.File = try std.fs.File.openRead(filename);
+    var file = try std.fs.cwd().openFile(filename, .{ .read = true });
     defer file.close();
-    var line_buf = try std.Buffer.initSize(allocator, 0);
-    defer line_buf.deinit();
 
-    while (file.inStream().stream
-        .readUntilDelimiterBuffer(&line_buf, '\n', c.LINE_MAX))
+    // var line_buf = try std.Buffer.initSize(allocator, 0);
+    // defer line_buf.deinit();
+    var line_buf: [1024]u8 = undefined;
+    var buf_reader = std.io.bufferedReader(file.reader());
+    var in_stream = buf_reader.reader();
+
+    while (try in_stream
+        .readUntilDelimiterOrEof(&line_buf, '\n'))
     {
-        try editorInsertRow(cfg, cfg.numRows, line_buf.toSlice());
+        try editorInsertRow(cfg, cfg.numRows, &line_buf);
     } else |err| switch (err) {
         error.EndOfStream => {},
         else => return err,
@@ -530,7 +534,7 @@ fn editorDrawRows(cfg: *const Config, abuf: *AppendBuffer) !void {
                 try abuf.append("~");
             }
         } else {
-            const renderedChars: []u8 = cfg.rows.at(filerow).renderedChars;
+            const renderedChars: []u8 = cfg.rows.items[filerow].renderedChars;
             var len = renderedChars.len;
             if (len < cfg.colOffset) {
                 // Cursor is past EoL; show nothing.
@@ -540,7 +544,7 @@ fn editorDrawRows(cfg: *const Config, abuf: *AppendBuffer) !void {
             }
             len = std.math.min(len, cfg.screenCols);
 
-            const hl = cfg.rows.at(filerow).hl;
+            const hl = cfg.rows.items[filerow].hl;
             var current_color: ?u8 = null; // null == Normal
             var j: usize = 0;
             while (j < len) : (j += 1) {
@@ -549,7 +553,7 @@ fn editorDrawRows(cfg: *const Config, abuf: *AppendBuffer) !void {
                 if (std.ascii.isCntrl(ch[0])) {
                     const sym = [1]u8{if (ch[0] <= 26) '@' + ch[0] else '?'};
                     try abuf.append("\x1b[7m");
-                    try abuf.append(sym);
+                    try abuf.append(&sym);
                     try abuf.append("\x1b[m");
                     if (current_color) |cc| {
                         var buf: [16]u8 = undefined;
@@ -594,9 +598,12 @@ fn editorDrawStatusBar(cfg: *const Config, abuf: *AppendBuffer) !void {
         filename = "[No Name]"[0..];
     }
 
-    var status = try std.fmt.allocPrint(allocator, "{} - {} lines {}", filename, cfg.numRows, if (cfg.dirty > 0) "(modified)" else "");
+    var status_value = if (cfg.dirty > 0) "(modified)" else "";
+    var status = try std.fmt.allocPrint(allocator, "{} - {} lines {}", .{ filename, cfg.numRows, status_value });
     defer allocator.free(status);
-    var right_status = try std.fmt.allocPrint(allocator, "{} | {}/{}", if (cfg.syntax) |s| s.fileType else "no ft", cfg.cursorY + 1, cfg.numRows);
+
+    var right_status_value = if (cfg.syntax) |s| s.fileType else "no ft";
+    var right_status = try std.fmt.allocPrint(allocator, "{} | {}/{}", .{ right_status_value, cfg.cursorY + 1, cfg.numRows });
     defer allocator.free(right_status);
 
     var len = @intCast(u16, status.len);
@@ -637,7 +644,7 @@ fn editorRefreshScreen(cfg: *Config) !void {
     try editorDrawMessageBar(cfg, abuf);
 
     var buf: [32]u8 = undefined;
-    var output = try std.fmt.bufPrint(buf[0..], "\x1b[{};{}H", (cfg.cursorY - cfg.rowOffset) + 1, cfg.cursorX_rendered + 1);
+    var output = try std.fmt.bufPrint(buf[0..], "\x1b[{};{}H", .{ (cfg.cursorY - cfg.rowOffset) + 1, cfg.cursorX_rendered + 1 });
     try abuf.append(output);
 
     try abuf.append("\x1b[?25h");
@@ -839,7 +846,7 @@ fn main_sub() !u8 {
         try editorOpen(&cfg, filename);
     }
 
-    try editorSetStatusMessage(&cfg, "HELP: Ctrl-S = save | Ctrl-Q = quit | Ctrl-F = find");
+    try editorSetStatusMessage(&cfg, "HELP: Ctrl-S = save | Ctrl-Q = quit | Ctrl-F = find", .{});
 
     while (true) {
         try editorRefreshScreen(&cfg);

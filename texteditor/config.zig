@@ -21,7 +21,7 @@ pub const Config = struct {
     dirty: usize, // number of unsaved changes
     filename: ?[]u8,
     statusMsg: ?[]u8,
-    statusMsgTime: u64, // POSIX timestamp, UTC, in seconds
+    statusMsgTime: i64, // POSIX timestamp, UTC, in seconds
     syntax: ?*const syn.EditorSyntax,
     rows: ArrayList(*buffer.Row),
 

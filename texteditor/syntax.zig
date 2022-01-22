@@ -7,8 +7,8 @@ pub const SyntaxFlags = enum(u16) {
 
 pub const EditorSyntax = struct {
     fileType: []const u8,
-    fileMatch: [][]const u8,
-    keywords: [][]const u8,
+    fileMatch: []const []const u8,
+    keywords: []const []const u8,
     singlelineCommentStart: []const u8,
     multilineCommentStart: []const u8,
     multilineCommentEnd: []const u8,
@@ -19,12 +19,13 @@ pub const EditorSyntax = struct {
 pub const HLDB = [_]EditorSyntax{
     EditorSyntax{
         .fileType = "c",
-        .fileMatch = [_][]u8{
+        // https://www.reddit.com/r/Zig/comments/s940kb/how_to_pass_const_u8_as_a_argument
+        .fileMatch = &.{
             ".c",
             ".h",
             ".cpp",
         },
-        .keywords = [_][]u8{
+        .keywords = &.{
             "switch",  "if",     "while", "for",     "break",  "continue", "return",
             "else",    "struct", "union", "typedef", "static", "enum",     "class",
             "case",    "int|",   "long|", "double|", "float|", "char|",    "unsigned|",
