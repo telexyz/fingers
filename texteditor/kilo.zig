@@ -70,7 +70,7 @@ fn enableRawMode(cfg: *Config) TerminalError!void {
 }
 
 fn editorReadKey() !u16 {
-    const stdin_file = try std.io.getStdIn();
+    const stdin_file = std.io.getStdIn();
     var keybuf: [32]u8 = undefined;
 
     // TODO stdin_file.read() is a blocking I/O call,
@@ -119,7 +119,7 @@ fn editorReadKey() !u16 {
 
         return '\x1b';
     } else {
-        return u16(keybuf[0]);
+        return @intCast(u16, keybuf[0]);
     }
 }
 
@@ -257,7 +257,7 @@ fn editorInsertChar(cfg: *Config, ch: u8) !void {
     if (cfg.cursorY == cfg.numRows) {
         try editorInsertRow(cfg, cfg.numRows, "");
     }
-    try editorRowInsertChar(cfg, cfg.rows.at(cfg.cursorY), cfg.cursorX, ch);
+    try editorRowInsertChar(cfg, cfg.rows.items[cfg.cursorY], cfg.cursorX, ch);
     cfg.cursorX += 1;
 }
 
@@ -265,9 +265,9 @@ fn editorInsertNewline(cfg: *Config) !void {
     if (cfg.cursorX == 0) {
         try editorInsertRow(cfg, cfg.cursorY, "");
     } else {
-        var row = cfg.rows.at(cfg.cursorY);
+        var row = cfg.rows.items[cfg.cursorY];
         try editorInsertRow(cfg, cfg.cursorY + 1, row.chars[cfg.cursorX..]);
-        row = cfg.rows.at(cfg.cursorY);
+        row = cfg.rows.items[cfg.cursorY];
         row.chars = row.chars[0..cfg.cursorX];
         try row.render();
     }
@@ -281,13 +281,13 @@ fn editorDelChar(cfg: *Config) !void {
     if (cfg.cursorX == 0 and cfg.cursorY == 0)
         return;
 
-    const row = cfg.rows.at(cfg.cursorY);
+    const row = cfg.rows.items[cfg.cursorY];
     if (cfg.cursorX > 0) {
         try editorRowDelChar(cfg, row, cfg.cursorX - 1);
         cfg.cursorX -= 1;
     } else {
-        cfg.cursorX = cfg.rows.at(cfg.cursorY - 1).len();
-        try editorRowAppendString(cfg, cfg.rows.at(cfg.cursorY - 1), row.chars);
+        cfg.cursorX = cfg.rows.items[cfg.cursorY - 1].len();
+        try editorRowAppendString(cfg, cfg.rows.items[cfg.cursorY - 1], row.chars);
         editorDelRow(cfg, cfg.cursorY);
         cfg.cursorY -= 1;
     }
@@ -663,9 +663,13 @@ fn editorSetStatusMessage(cfg: *Config, comptime format: []const u8, args: anyty
 
 // Caller must free the result.
 fn editorPrompt(cfg: *Config, comptime prompt: []const u8, callback: ?fn (cfg: *Config, prompt: []u8, ch: u16) anyerror!void) !?[]u8 {
+
+    // var buff: [1028]u8 = undefined;
+    // var buf = buff[0..];
     var buf = try std.Buffer.init(allocator, "");
+
     while (true) {
-        try editorSetStatusMessage(cfg, prompt, buf.toSlice()[0..]);
+        try editorSetStatusMessage(cfg, prompt, buf);
         try editorRefreshScreen(cfg);
 
         const ch = try editorReadKey();
@@ -673,8 +677,9 @@ fn editorPrompt(cfg: *Config, comptime prompt: []const u8, callback: ?fn (cfg: *
             ch == @enumToInt(EditorKey.Backspace) or
             ch == @enumToInt(EditorKey.Backspace2))
         {
-            if (buf.len() != 0) {
+            if (buf.len != 0) {
                 buf.shrink(buf.len() - 1);
+                // buf = buff[0 .. buf.len - 1];
             }
         } else if (ch == '\x1b') { // input is cancelled
             try editorSetStatusMessage(cfg, "");
@@ -828,7 +833,7 @@ fn initEditor(cfg: *Config) !void {
     cfg.screenRows -= 2; // for status line
 }
 
-fn main_sub() !u8 {
+fn main_sub() !void {
     // command line args
     var args_it = std.process.args();
     // const ego = try args_it.next(allocator).?;
@@ -852,18 +857,10 @@ fn main_sub() !u8 {
         try editorRefreshScreen(&cfg);
         try editorProcessKeypress(&cfg);
     }
-
-    return 0;
 }
 
-pub fn main() u8 {
-    if (main_sub()) |v| {
-        _ = v;
-        return 0;
-    } else |err| {
-        _ = err;
-        return 1;
-    }
+pub fn main() !void {
+    try main_sub();
 }
 
 // eof
