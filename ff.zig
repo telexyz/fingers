@@ -1,3 +1,5 @@
+// https://github.com/paulsmith/texteditor-zig/blob/main/src/main.zig
+
 const std = @import("std");
 const ascii = @import("std").ascii;
 const fmt = @import("std").fmt;
