@@ -16,8 +16,6 @@ const _c = @cImport({
     @cInclude("stdlib.h");
     @cInclude("termios.h");
     @cInclude("unistd.h");
-
-    @cInclude("errno.h");
 });
 
 const kilo_version = "0.0.1";
@@ -64,7 +62,7 @@ const Editor = struct {
     col_offset: usize,
     rows: StringArrayList,
     shutting_down: bool,
-    allocator: *mem.Allocator,
+    allocator: mem.Allocator,
 
     const Self = @This();
 
@@ -102,7 +100,15 @@ const Editor = struct {
     }
 
     fn enableRawMode(self: *Self) !void {
-        self.orig_termios = try _c.tcgetattr(stdin_fd);
+        self.orig_termios = try _c.tcgetattr(stdin_fd, &_c.termios{
+            .c_iflag = 0,
+            .c_oflag = 0,
+            .c_cflag = 0,
+            .c_lflag = 0,
+            .c_cc = "12345678901234567890".*,
+            .c_ispeed = 0,
+            .c_ospeed = 0,
+        });
         var raw = self.orig_termios;
         raw.iflag &= ~@as(_c.tcflag_t, _c.BRKINT | _c.ICRNL | _c.INPCK | _c.ISTRIP | _c.IXON);
         raw.oflag &= ~@as(_c.tcflag_t, _c.OPOST);
@@ -304,12 +310,14 @@ const WindowSize = struct {
 
 fn getWindowSize() !WindowSize {
     var ws: _c.winsize = undefined;
-    switch (_c.errno(_c.system.ioctl(stdin_fd, _c.TIOCGWINSZ, &ws))) {
+    // switch (_c.errno(_c.ioctl(stdin_fd, _c.TIOCGWINSZ, &ws))) {
+    switch (_c.ioctl(stdin_fd, _c.TIOCGWINSZ, &ws)) {
         0 => return WindowSize{ .rows = ws.ws_row, .cols = ws.ws_col },
-        _c.EBADF => return error.BadFileDescriptor,
-        _c.EINVAL => return error.InvalidRequest,
-        _c.ENOTTY => return error.NotATerminal,
-        else => |err| return _c.unexpectedErrno(err),
+        // _c.EBADF => return error.BadFileDescriptor,
+        // _c.EINVAL => return error.InvalidRequest,
+        // _c.ENOTTY => return error.NotATerminal,
+        // else => |err| return _c.unexpectedErrno(err),
+        else => return WindowSize{ .rows = 0, .cols = 0 },
     }
 }
 
