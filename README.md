@@ -45,8 +45,10 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 * Sử dụng `simple.css` https://raw.githubusercontent.com/kevquirk/simple.css/main/simple.css
 
 
-- - -
+- - - - - - - - - - - - - - -
 
+- - - - - - - - - - - - - - -
+ 
 
 ## Module 3b/ Triển khai bộ viet_tknz to wasm
 * Gọi được hàm phân tích syllable từ js
