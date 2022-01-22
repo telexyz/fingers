@@ -1,4 +1,4 @@
-# Deploy to Wasm / TextEditor / Bộ gõ
+# Deploy to Wasm
 
 ### Getting started
 
@@ -31,6 +31,7 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 
 [>> DOING <<]
 
+* Xây dựng lại bộ gõ Telex cải tiến, dùng lại 1 phần code của `stp/e`
 
 [>> DONE <<]
 
