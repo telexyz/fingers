@@ -26,18 +26,24 @@ pub fn main() anyerror!void {
         const leaked = gpa.deinit();
         if (leaked) panic("leaked memory", null);
     }
+
     var editor = try Editor.new(gpa_allocator);
     defer gpa_allocator.destroy(editor);
+
     const args = try std.process.argsAlloc(gpa_allocator);
     defer std.process.argsFree(gpa_allocator, args);
+
     if (args.len == 2) try editor.open(args[1]);
+
     try editor.enableRawMode();
     defer editor.disableRawMode();
+
     while (true) {
         try editor.refreshScreen();
         try editor.processKeyPress();
         if (editor.shutting_down) break;
     }
+
     editor.free();
     try stdout.writeAll("\x1b[2J");
     try stdout.writeAll("\x1b[H");
