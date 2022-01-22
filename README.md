@@ -34,7 +34,7 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 
 [>> DOING <<]
 
-* Xây dựng lại bộ gõ Telex cải tiến, dùng lại 1 phần code của `stp/e`
+* Xây dựng bộ gõ Telex cải tiến, dùng lại 1 phần code của `stp/e`
 
 [>> DONE <<]
 
@@ -135,24 +135,29 @@ Tạo 3 loại nodes:
 https://github.com/hexops/fastfilter#benchmarks
 
 Dùng trigram để cân bằng giữa độ chính xác và số lượng gram count phải lưu trữ:
+```
 count=1 => `10_956_634` 3-grams => `12mb BinaryFuse(u8)`
 count=2 => ` 2_345_545` 3-grams => ` 5mb BinaryFuse(u16)`
 remains => ` 4_000_183` 3-grams => `24mb HashCount`(2^22 x 6-bytes)
-
 TOTAL: 41MB,
-
+```
 => Mỗi lookup cần đối chiếu với 2 filters và 1 hash_count. Cách này cân bằng giữa MEM và CPU!
 
 
-Tách kỹ hơn nữa ta được:
-count=1 => `10_956_634` 3-grams => `12mb BinaryFuse(u8)` (`10_956_634*9/(8*1024*1024)`)
-count=2 => ` 2_345_545` 3-grams => ` 5mb BinaryFuse(u16)`(`2_345_545*18/(8*1024*1024)`)
-count=3 => ` 1_024_192` 3-grams => ` 2mb BinaryFuse(u16)`
-count=4 => `   589_105` 3-grams => ` 1mb BinaryFuse(u16)`
-count=5 => `   383_368` 3-grams => ` 1mb BinaryFuse(u16)`
-remains => ` 2_003_518` 3-grams => `12mb HashCount`(2^21 x 6-bytes)
+Tách thô hơn nữa để tiết kiệm MEM ta được:
+```
+a/ không tồn tại
+b/ count=1,2   => `13_302_179` 3-grams => `14.3 mb BinaryFuse(u8)`
+c/ count=3,4,5 => ` 1_996_665` 3-grams => ` 4.3 mb BinaryFuse(u16)`
+d/ remains     => ` 2_003_518` 3-grams => ` 4.3 mb BinaryFuse(u16)`
+   TOTAL: 23MB,
+```
 
-TOTAL: 35MB,
-
-=> Mỗi lookup cần đối chiếu với 5 filters và 1 hash_count. Tốn CPU gấp đôi!
-_NOTE_: Có thể nhóm count=2,3 và count=4,5 vào một filter để tiết kiệt thời gian lookup!
+Tính điểm khi so khớp với chuỗi tokens đầu vào
+```
+a/ 1 điểm
+b/ 2 điểm
+c/ 4 điểm
+d/ 8 điểm
+```
+=> !!! Cần đo xem cách tách thô này làm giảm độ hiệu quả của mô hình đi bao nhiêu ???
