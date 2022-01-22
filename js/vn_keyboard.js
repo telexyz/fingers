@@ -30,6 +30,12 @@ async function mapKeysForMe(event) {
         return; 
     }
 
+    // Bỏ qua phím Enter
+    if (event.key == 'Enter' || event.keyCode == 13) { 
+        event.preventDefault();
+        return;
+    }
+
     var s = window.getSelection();
     let i = s.anchorOffset;
     var p = document.getElementById('texteditor');
@@ -102,7 +108,7 @@ async function mapKeysForMe(event) {
         return;
     }
 
-    // Press space will auto-complete sent, double space to pause / play audio
+    // Press space will auto-complete sent
     if (c1 === 32 || c1 === 160) { // Android space char code is 160
         if (c2 === 32 || c2 === 160) { // Double-space
             console.log(" > > Double spaces < <");

@@ -70,7 +70,7 @@ export function resetTextAndPos() {
       lastCurrPos = n;
     }
     currP.firstChild.textContent = currInnerText;
-    // console.log(`n=${n}, lastCurrPos=${lastCurrPos}\nnormText="${normText}", remain="${remain}"`);
+    console.log(`n=${n}, lastCurrPos=${lastCurrPos}\nnormText="${normText}", remain="${remain}"`);
     collapse(sel, currP.firstChild, lastCurrPos);
 }
 
