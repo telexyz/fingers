@@ -29,7 +29,8 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 * Viết texteditor in Zig
   https://viewsourcecode.org/snaptoken/kilo
   https://github.com/paulsmith/texteditor-zig/blob/main/src/main.zig
-
+  https://zig.news/lhp/want-to-create-a-tui-application-the-basics-of-uncooked-terminal-io-17gm
+  
 [>> DONE <<]
 
 * Tách phần code từ `stp/e` ra để có ngay một bộ gõ đơn giản, có các tính năng nâng cao ở dạng prototye và cải tiến từ đấy

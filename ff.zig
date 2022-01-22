@@ -1,12 +1,12 @@
 // https://github.com/paulsmith/texteditor-zig/blob/main/src/main.zig
 
 const std = @import("std");
-const ascii = @import("std").ascii;
-const fmt = @import("std").fmt;
-const io = @import("std").io;
-const heap = @import("std").heap;
-const mem = @import("std").mem;
-usingnamespace @import("std").os;
+const ascii = std.ascii;
+const fmt = std.fmt;
+const io = std.io;
+const heap = std.heap;
+const mem = std.mem;
+const os = std.os;
 
 const _c = @cImport({
     @cInclude("ctype.h");
@@ -53,7 +53,7 @@ var gpa = heap.GeneralPurposeAllocator(.{}){};
 const StringArrayList = std.ArrayList([]u8);
 
 const Editor = struct {
-    orig_termios: _c.termios,
+    orig_termios: os.termios,
     screen_rows: u16,
     cols: u16,
     cx: i16,
@@ -100,27 +100,19 @@ const Editor = struct {
     }
 
     fn enableRawMode(self: *Self) !void {
-        self.orig_termios = try _c.tcgetattr(stdin_fd, &_c.termios{
-            .c_iflag = 0,
-            .c_oflag = 0,
-            .c_cflag = 0,
-            .c_lflag = 0,
-            .c_cc = "12345678901234567890".*,
-            .c_ispeed = 0,
-            .c_ospeed = 0,
-        });
+        self.orig_termios = try os.tcgetattr(stdin_fd);
         var raw = self.orig_termios;
-        raw.iflag &= ~@as(_c.tcflag_t, _c.BRKINT | _c.ICRNL | _c.INPCK | _c.ISTRIP | _c.IXON);
-        raw.oflag &= ~@as(_c.tcflag_t, _c.OPOST);
-        raw.cflag |= _c.CS8;
-        raw.lflag &= ~@as(_c.tcflag_t, _c.ECHO | _c.ICANON | _c.IEXTEN | _c.ISIG);
+        raw.iflag &= ~@as(os.system.tcflag_t, os.system.BRKINT | os.system.ICRNL | os.system.INPCK | os.system.ISTRIP | os.system.IXON);
+        raw.oflag &= ~@as(os.system.tcflag_t, os.system.OPOST);
+        raw.cflag |= os.system.CS8;
+        raw.lflag &= ~@as(os.system.tcflag_t, os.system.ECHO | os.system.ICANON | os.system.IEXTEN | os.system.ISIG);
         raw.cc[_c.VMIN] = 0;
         raw.cc[_c.VTIME] = 1;
-        try _c.tcsetattr(stdin_fd, _c.TCSA.FLUSH, raw);
+        try os.tcsetattr(stdin_fd, os.TCSA.FLUSH, raw);
     }
 
     fn disableRawMode(self: *Self) void {
-        _c.tcsetattr(stdin_fd, _c.TCSA.FLUSH, self.orig_termios) catch panic("tcsetattr", null);
+        os.tcsetattr(stdin_fd, os.TCSA.FLUSH, self.orig_termios) catch panic("tcsetattr", null);
     }
 
     fn moveCursor(self: *Self, movement: Movement) void {
@@ -158,7 +150,8 @@ const Editor = struct {
         }
     }
 
-    fn readKey() !Key {
+    fn readKey(self: *Self) !Key {
+        _ = self;
         const c = try readByte();
         switch (c) {
             '\x1b' => {
@@ -309,15 +302,13 @@ const WindowSize = struct {
 };
 
 fn getWindowSize() !WindowSize {
-    var ws: _c.winsize = undefined;
-    // switch (_c.errno(_c.ioctl(stdin_fd, _c.TIOCGWINSZ, &ws))) {
-    switch (_c.ioctl(stdin_fd, _c.TIOCGWINSZ, &ws)) {
-        0 => return WindowSize{ .rows = ws.ws_row, .cols = ws.ws_col },
-        // _c.EBADF => return error.BadFileDescriptor,
-        // _c.EINVAL => return error.InvalidRequest,
-        // _c.ENOTTY => return error.NotATerminal,
-        // else => |err| return _c.unexpectedErrno(err),
-        else => return WindowSize{ .rows = 0, .cols = 0 },
+    var ws: os.system.winsize = undefined;
+    switch (os.errno(os.system.ioctl(stdin_fd, _c.TIOCGWINSZ, &ws))) {
+        std.c.E.SUCCESS => return WindowSize{ .rows = ws.ws_row, .cols = ws.ws_col },
+        // EBADF => return error.BadFileDescriptor,
+        // EINVAL => return error.InvalidRequest,
+        // ENOTTY => return error.NotATerminal,
+        else => |err| return os.unexpectedErrno(err),
     }
 }
 
