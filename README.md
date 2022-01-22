@@ -1,10 +1,5 @@
 # Deploy to Wasm / TextEditor / Bộ gõ
 
-## Create Zig Wasm App
-
-Boilerplate to stand up a SPA app using Zig 0.9 for webassembly and Vite. 
-Commands sent using [WAPC](https://wapc.io/).
-
 ### Getting started
 
 - Get npm/node
