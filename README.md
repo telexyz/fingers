@@ -5,14 +5,11 @@ Tham khảo https://languagetool.org/editor/new
 
 ### Getting started
 
-- Get npm/node
-- Get zig 0.9
-- Get gyro for package management
 - Create a deps.zig by running `gyro fetch`
-- Build wasm payload
+- Build wasm payload with `zig build`
 - `npm install` to setup vite dependencies
 - `npm run dev` to start your dev server
-- Point your browser at localhost:3000
+- Point your browser at `localhost:3000`
 
 
 ## Benefit of Wasm
@@ -27,7 +24,7 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 * Pattern matching (vài trăm kb)
 * Rule-based (can be hard coded)
 * Pointwise
-* Selected n-gram (2,3,4-gram bỏ count = 1 chiếm 41mb)
+* Selected n-gram (41mb 2,3,4-gram tinh gọn)
 * Neural Network (ONNX Runtime Web)
 
 ## Module 3a/ Làm giao diện web để có đất thử nghiệm bộ gõ
