@@ -27,7 +27,7 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 * Pattern matching (vài trăm kb)
 * Rule-based (can be hard coded)
 * Pointwise
-* Selected n-gram (chỉ trigram chiếm 23-43mb, 2,3,4-gram lưu thô chiếm 74mb)
+* Selected n-gram (2,3,4-gram bỏ count = 1 chiếm 41mb)
 * Neural Network (ONNX Runtime Web)
 
 ## Module 3a/ Làm giao diện web để có đất thử nghiệm bộ gõ
@@ -142,15 +142,14 @@ TOTAL: 41MB,
 => Mỗi lookup cần đối chiếu với 2 filters và 1 hash_count. Cách này cân bằng giữa MEM và CPU!
 
 
-Tách thô hơn nữa để tiết kiệm MEM ta được:
+Loại count = 1 và quantization về khoảng 8 nhóm để tiết kiệm MEM ta được:
 ```
-a/ không tồn tại
-b/ count=1,2   => `13_302_179` 3-grams => `14.3 mb BinaryFuse(u8)`
-c/ count=3,4,5 => ` 1_996_665` 3-grams => ` 4.3 mb BinaryFuse(u16)`
-d/ remains     => ` 2_003_518` 3-grams => ` 4.3 mb BinaryFuse(u16)`
-   TOTAL: 23MB
+a/ count=0,1
+b/ count=2     => `2_345_545` 3-grams => `5.0 mb BinaryFuse(u16)`
+c/ count=3,4,5 => `1_996_665` 3-grams => `4.3 mb BinaryFuse(u16)`
+d/ remains     => `2_003_518` 3-grams => `4.3 mb BinaryFuse(u16)`
+   TOTAL: 14MB
 ```
-
 Tính điểm khi so khớp với chuỗi tokens đầu vào
 ```
 a/ 1 điểm
@@ -162,16 +161,16 @@ d/ 8 điểm
 
 #### 2-gram
 ```
-count=1,2   => `1_444_648` 2-grams => `1.5 mb BinaryFuse(u8)`
+count=1,2   => `1_444_648` 2-grams => `3.1 mb BinaryFuse(u16)`
 count=3,4,5 => `  424_664` 2-grams => `0.9 mb BinaryFuse(u16)`
 remains     => `  796_710` 2-grams => `1.7 mb BinaryFuse(u16)`
-TOTAL: 4.1MB
+TOTAL: 6MB
 ```
 
 #### 4-gram
 ```
-count=1,2   => `33_287_534` 4-grams => `35.7 mb BinaryFuse(u8)`
-count=3,4,5 => ` 3_116_651` 4-grams => ` 6.7 mb BinaryFuse(u16)`
-remains     => ` 2_297_654` 4-grams => ` 4.9 mb BinaryFuse(u16)`
-TOTAL: 47MB
+count=2     => `4_412_961` 4-grams => `9.5 mb BinaryFuse(u16)`
+count=3,4,5 => `3_116_651` 4-grams => `6.7 mb BinaryFuse(u16)`
+remains     => `2_297_654` 4-grams => `4.9 mb BinaryFuse(u16)`
+TOTAL: 21MB
 ```
