@@ -49,8 +49,6 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 
 
 - - - - - - - - - - - - - - -
-
-- - - - - - - - - - - - - - -
  
 
 ## Module 3b/ Triển khai bộ viet_tknz to wasm
