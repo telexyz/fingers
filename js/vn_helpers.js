@@ -27,9 +27,9 @@ const tonesMap = {
 };
 
 const vowelsMap = {
-    "aa":"â", "az":"â", "aw":"ă", 
-    "ee":"ê", "ez":"ê",
-    "oo":"ô", "oz":"ô", "ow":"ơ",
+    "aa":"â", "aq":"â", "aw":"ă", 
+    "ee":"ê", "eq":"ê",
+    "oo":"ô", "oq":"ô", "ow":"ơ",
     "uw":"ư",
 }
 
@@ -141,7 +141,7 @@ export function changeMark(s, mark) {
     let tone = _getTone(s);
     let unTone = _removeTone(s);
 
-    if (!"wz".includes(mark)) {
+    if (!"wq".includes(mark)) {
         return changeTone(unTone + mark, tone);
     }
 
@@ -152,7 +152,7 @@ export function changeMark(s, mark) {
     if (!m) { return s + mark; }
 
     // Invalid mark general checking
-    if ((mark !== "w" && mark !== "z")&& !m[2].includes(mark)) {
+    if ((mark !== "w" && mark !== "q")&& !m[2].includes(mark)) {
         return s + mark;
     }
 
@@ -351,7 +351,7 @@ export function telexifyWord(w) {
         c = w[i];
         if ("sfrxj".includes(c)) {
             neww = changeTone(neww, c);
-        } else if ("daeowz".includes(c)) {
+        } else if ("daeowzq".includes(c)) {
             neww = changeMark(neww, c);
         } else {
             neww += c;

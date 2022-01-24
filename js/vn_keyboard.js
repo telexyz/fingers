@@ -92,22 +92,6 @@ async function mapKeysForMe(event) {
         matches = [];
     }
 
-    // Press ,. or ., will remove the last phrase (to undo voice input)
-    // console.log("keyup", c1, c2);
-    if ((c1 === 44 && c2 === 46) || 
-        (c2 === 44 && c1 === 46)) {
-
-        let n = l.length - 1, validChars = VnHelpers.PHRASE_VALID_CHARS;
-        while (n > 0 && !validChars.includes(l[n])) { n--; }
-        while (n > 0 &&  validChars.includes(l[n])) { n--; }
-
-        p.firstChild.textContent = l.substr(0, n === 0 ? 0 : ++n);
-        CursorHelpers.collapse(s, p.firstChild, 
-            CursorHelpers.setLastCursorFast(n));
-
-        return;
-    }
-
     // Press space will auto-complete sent
     if (c1 === 32 || c1 === 160) { // Android space char code is 160
         if (c2 === 32 || c2 === 160) { // Double-space
@@ -156,7 +140,7 @@ async function mapKeysForMe(event) {
         : lastWord.slice(-1) === lastChar ? lastChar : null;
     // console.log('lastChar',lastChar, lastWord.slice(-1), String.fromCharCode(c1));
     if (c2 != 32 && c2 != 160 && lastChar && 
-        (true || "dsfrxj aeow".includes(lastChar) || c1 === 160)) {
+        (true || "dsfrxj zqw".includes(lastChar) || c1 === 160)) {
         let newWord = VnHelpers.telexifyWord(lastWord);
         // console.log('TELEX:',lastWord,'=>',newWord);
         if (newWord !== lastWord) {
