@@ -1,5 +1,5 @@
 {
-  "name": "create-zig-wasm-app",
+  "name": "fivefingers-vietnamese-input-method",
   "version": "0.0.0",
   "scripts": {
     "dev": "vite",

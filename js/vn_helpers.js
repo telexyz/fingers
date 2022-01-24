@@ -27,10 +27,10 @@ const tonesMap = {
 };
 
 const vowelsMap = {
-    "aa":"â", "aw":"ă", 
-    "ee":"ê", 
-    "oo":"ô", "ow":"ơ",
-    "uw":"ư", 
+    "aa":"â", "az":"â", "aw":"ă", 
+    "ee":"ê", "ez":"ê",
+    "oo":"ô", "oz":"ô", "ow":"ơ",
+    "uw":"ư",
 }
 
 export function makeUseOfBiTriGramsFrom(txt) {
@@ -141,20 +141,18 @@ export function changeMark(s, mark) {
     let tone = _getTone(s);
     let unTone = _removeTone(s);
 
-    if (!"oaewz".includes(mark)) {
+    if (!"wz".includes(mark)) {
         return changeTone(unTone + mark, tone);
     }
 
     let naked = removeMarks(unTone, 'keep đ/Đ');
-    if (mark === "z") { return naked; }
-
     // console.log('changeMark:', s, tone, naked, mark);
 
     let m = naked.match(_syllLeft);
     if (!m) { return s + mark; }
 
     // Invalid mark general checking
-    if (mark !== "w" && !m[2].includes(mark)) {
+    if ((mark !== "w" && mark !== "z")&& !m[2].includes(mark)) {
         return s + mark;
     }
 
@@ -353,7 +351,7 @@ export function telexifyWord(w) {
         c = w[i];
         if ("sfrxj".includes(c)) {
             neww = changeTone(neww, c);
-        } else if ("daeow".includes(c)) {
+        } else if ("daeowz".includes(c)) {
             neww = changeMark(neww, c);
         } else {
             neww += c;
