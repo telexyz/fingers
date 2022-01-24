@@ -30,6 +30,8 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 
 [>> DOING <<]
 
+* Sử dụng thread? https://web.dev/webassembly-threads
+
 * Xây dựng bộ gõ Telex cải tiến, dùng lại 1 phần code của `stp/e`
 
 [>> DONE <<]
@@ -65,7 +67,8 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 ## Module 3d/ Sửa lỗi chính tả, lỗi cú pháp dùng rule-based
 
 
-- - -
+- - - - - - - - - - - - - - -
+
 
 ## PHỤ LỤC
 
