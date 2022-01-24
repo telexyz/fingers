@@ -23,7 +23,7 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 * Pattern matching (vài trăm kb)
 * Rule-based (can be hard coded)
 * Pointwise
-* Selected n-gram (31.6 MB of 2,3,4-gram tinh gọn)
+* Selected n-gram (31.7 MB of 2,3,4-gram tinh gọn)
 * Neural Network (ONNX Runtime Web)
 
 ## Module 3a/ Làm giao diện web để có đất thử nghiệm bộ gõ
@@ -166,10 +166,13 @@ f/ 64 điểm
 
 #### 2-gram
 ```
-count=1,2   => `1_444_648` 2-grams => `1.5 mb BinaryFuse(u8)`
-count=3,4,5 => `  424_664` 2-grams => `0.9 mb BinaryFuse(u16)`
-remains     => `  796_710` 2-grams => `1.7 mb BinaryFuse(u16)`
-TOTAL: 4.1 MB
+a/ count=1,2    => `1_444_334` 2-grams => `1.5 mb BinaryFuse(u8)`
+b/ count=03..05 => `  424_429` 2-grams => `1.0 mb BinaryFuse(u16)`
+c/ count=06..11 => `  276_007` 2-grams => `0.6 mb BinaryFuse(u16)`
+d/ count=12..25 => `  199_301` 2-grams => `0.4 mb BinaryFuse(u16)`
+e/ count=25..80 => `  170_952` 2-grams => `0.4 mb BinaryFuse(u16)`
+f/ remain       => `  150_211` 2-grams => `0.3 mb BinaryFuse(u16)`
+TOTAL: 4.2 MB
 ```
 
 #### 4-gram
