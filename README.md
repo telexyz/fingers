@@ -2,8 +2,6 @@
 
 UI tham khảo https://languagetool.org/editor/new
 
-Database tham khảo https://phiresky.github.io/blog/2021/hosting-sqlite-databases-on-github-pages
-
 ### Getting started
 
 - Create a deps.zig by running `gyro fetch`
@@ -34,9 +32,10 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 
 * Xây dựng bộ gõ Telex cải tiến, dùng lại 1 phần code của `stp/e`
 
-* Phân tích 
-
 [>> DONE <<]
+
+* Phân tích https://phiresky.github.io/blog/2021/hosting-sqlite-databases-on-github-pages
+  Query a dataset with 6 tables and over 8 million rows (670 MiByte total) need to fetch 10k data only! => wasm load data remotely chunk by chunk!
 
 * Tìm hiểu texteditor in Zig (xem `.save`)
   https://viewsourcecode.org/snaptoken/kilo
