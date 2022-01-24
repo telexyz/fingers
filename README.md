@@ -23,7 +23,7 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 * Pattern matching (vài trăm kb)
 * Rule-based (can be hard coded)
 * Pointwise
-* Selected n-gram (41mb 2,3,4-gram tinh gọn)
+* Selected n-gram (31.6 MB of 2,3,4-gram tinh gọn)
 * Neural Network (ONNX Runtime Web)
 
 ## Module 3a/ Làm giao diện web để có đất thử nghiệm bộ gõ
@@ -143,33 +143,42 @@ TOTAL: 41MB,
 
 Loại count = 1 và quantization về khoảng 8 nhóm để tiết kiệm MEM ta được:
 ```
-a/ count=0,1
-b/ count=2     => `2_345_545` 3-grams => `5.0 mb BinaryFuse(u16)`
-c/ count=3,4,5 => `1_996_665` 3-grams => `4.3 mb BinaryFuse(u16)`
-d/ remains     => `2_003_518` 3-grams => `4.3 mb BinaryFuse(u16)`
-   TOTAL: 14MB
+o/ count=0,1
+a/ count=02     => `2_343_228` 3-grams => `2.5 mb BinaryFuse(u8)`
+b/ count=03..05 => `1_995_402` 3-grams => `4.3 mb BinaryFuse(u16)`
+c/ count=06..11 => `  955_810` 3-grams => `2.0 mb BinaryFuse(u16)`
+d/ count=12..25 => `  533_752` 3-grams => `1.2 mb BinaryFuse(u16)`
+e/ count=25..80 => `  339_218` 3-grams => `0.7 mb BinaryFuse(u16)`
+f/ remain       => `  174_532` 3-grams => `0.4 mb BinaryFuse(u16)`
+   TOTAL: 11.1 MB
 ```
-Tính điểm khi so khớp với chuỗi tokens đầu vào
+Cách tính điểm khi so khớp với chuỗi tokens đầu vào
 ```
-a/ 1 điểm
-b/ 2 điểm
-c/ 4 điểm
-d/ 8 điểm
+o/ 01 điểm
+a/ 02 điểm
+b/ 04 điểm
+c/ 08 điểm
+d/ 16 điểm
+e/ 32 điểm
+f/ 64 điểm
 ```
 => !!! Cần đo xem cách tách thô này làm giảm độ hiệu quả của mô hình đi bao nhiêu ???
 
 #### 2-gram
 ```
-count=1,2   => `1_444_648` 2-grams => `3.1 mb BinaryFuse(u16)`
+count=1,2   => `1_444_648` 2-grams => `1.5 mb BinaryFuse(u8)`
 count=3,4,5 => `  424_664` 2-grams => `0.9 mb BinaryFuse(u16)`
 remains     => `  796_710` 2-grams => `1.7 mb BinaryFuse(u16)`
-TOTAL: 6MB
+TOTAL: 4.1 MB
 ```
 
 #### 4-gram
 ```
-count=2     => `4_412_961` 4-grams => `9.5 mb BinaryFuse(u16)`
-count=3,4,5 => `3_116_651` 4-grams => `6.7 mb BinaryFuse(u16)`
-remains     => `2_297_654` 4-grams => `4.9 mb BinaryFuse(u16)`
-TOTAL: 21MB
+a/ count=2      => `4_407_945` 4-grams => `4.7 mb BinaryFuse(u8)`
+b/ count=03..05 => `3_114_767` 4-grams => `6.7 mb BinaryFuse(u16)`
+c/ count=06..11 => `1_252_778` 4-grams => `2.7 mb BinaryFuse(u16)`
+d/ count=12..25 => `  601_206` 4-grams => `1.3 mb BinaryFuse(u16)`
+e/ count=25..80 => `  322_523` 4-grams => `0.7 mb BinaryFuse(u16)`
+f/ remain       => `  121_206` 4-grams => `0.3 mb BinaryFuse(u16)`
+TOTAL: 16.4 MB
 ```
