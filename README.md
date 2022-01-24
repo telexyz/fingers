@@ -152,18 +152,6 @@ e/ count=25..80 => `  339_218` 3-grams => `0.7 mb BinaryFuse(u16)`
 f/ remain       => `  174_532` 3-grams => `0.4 mb BinaryFuse(u16)`
    TOTAL: 11.1 MB
 ```
-Cách tính điểm khi so khớp với chuỗi tokens đầu vào
-```
-o/ 01 điểm
-a/ 02 điểm
-b/ 04 điểm
-c/ 08 điểm
-d/ 16 điểm
-e/ 32 điểm
-f/ 64 điểm
-```
-=> !!! Cần đo xem cách tách thô này làm giảm độ hiệu quả của mô hình đi bao nhiêu ???
-
 #### 2-gram
 ```
 a/ count=1,2    => `1_444_334` 2-grams => `1.5 mb BinaryFuse(u8)`
@@ -185,3 +173,27 @@ e/ count=25..80 => `  322_523` 4-grams => `0.7 mb BinaryFuse(u16)`
 f/ remain       => `  121_206` 4-grams => `0.3 mb BinaryFuse(u16)`
 TOTAL: 16.4 MB
 ```
+
+#### Chiến thuật load n-gram filters
+
+Bé load trước, lớn load sau, load song song 3 filter cùng loại 1 lúc
+```
+2f 3f 4f =  1.0 mb
+2e 3e 4e =  1.8 mb
+2d 3d 4d =  2.9 mb
+2c 3c 4c =  5.3 mb
+2a 3a 4a =  8.7 mb
+2b 3b 4b = 12.0 mb
+```
+
+#### Cách tính điểm khi so khớp với chuỗi tokens đầu vào
+```
+o/ 01 điểm
+a/ 02 điểm
+b/ 04 điểm
+c/ 08 điểm
+d/ 16 điểm
+e/ 32 điểm
+f/ 64 điểm
+```
+=> !!! Cần đo xem cách tách thô này làm giảm độ hiệu quả của mô hình đi bao nhiêu ???
