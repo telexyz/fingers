@@ -1,7 +1,8 @@
 # Deploy to Wasm
 
-Tham khảo https://languagetool.org/editor/new
+UI tham khảo https://languagetool.org/editor/new
 
+Database tham khảo https://phiresky.github.io/blog/2021/hosting-sqlite-databases-on-github-pages
 
 ### Getting started
 
@@ -33,9 +34,11 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 
 * Xây dựng bộ gõ Telex cải tiến, dùng lại 1 phần code của `stp/e`
 
+* Phân tích 
+
 [>> DONE <<]
 
-* Viết texteditor in Zig
+* Tìm hiểu texteditor in Zig (xem `.save`)
   https://viewsourcecode.org/snaptoken/kilo
   https://github.com/paulsmith/texteditor-zig/blob/main/src/main.zig
   https://zig.news/lhp/want-to-create-a-tui-application-the-basics-of-uncooked-terminal-io-17gm
