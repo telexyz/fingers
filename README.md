@@ -34,7 +34,7 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 
 * Nếu từ không phải tiếng Việt thì chỉ hiển thị nguyên gốc
 
-* Dùng `q` để bỏ dấu `ô â ê`
+* Dùng `q hoặc z` để loại bỏ dấu và thanh
 
 [>> DONE <<]
 
