@@ -20,19 +20,21 @@ https://wasm4.org/docs/#why-wasm-4
 
 __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó trôi nên cần sử dụng những models có dung lượng nhỏ (vài tới vài chục MB). Full n-gram chiếm vài trăm MB không còn thích hợp. Các lựa chọn khác bao gồm:
 
-* Pattern matching (vài trăm kb)
-* Rule-based (can be hard coded)
-* Pointwise
+* Pattern matching (vài trăm kb filter)
+* Rule-based (hard-coded)
+* Pointwise (SVM, tree/forest ...)
 * Selected n-gram (31.7 MB of 2,3,4-gram tinh gọn)
-* Neural Network (ONNX Runtime Web)
+* Neural network (ONNX Runtime Web)
 
 ## Module 3a/ Bộ gõ telex cải tiến trên nền web
 
 [>> DOING <<]
 
-* Hiện lựa chọn tiếng Việt và nguyên gốc `[more|moẻ]` double space để lựa chọn nguyên gốc
+* Hiện lựa chọn tiếng Việt và nguyên gốc `more|moẻ` double space để dùng nguyên gốc
 
-* Dùng q để bỏ dấu ô â ê
+* Nếu từ không phải tiếng Việt thì chỉ hiển thị nguyên gốc
+
+* Dùng `q` để bỏ dấu `ô â ê`
 
 [>> DONE <<]
 
