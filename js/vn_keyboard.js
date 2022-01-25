@@ -45,7 +45,7 @@ async function mapKeysForMe(event) {
         if (c2 === 32 || c2 === 160) { // Double-space
             console.log(" > > Double spaces < <");
         }
-        // CursorHelpers.resetTextAndPos();
+        // TODO: Hiển thị lựa chọn nguyên bản
         return;
     }    
 

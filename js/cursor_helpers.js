@@ -46,34 +46,6 @@ export function collapse(sel, elem, n) {
     sel.addRange(range);
 }
 
-export function resetTextAndPos() {
-    // Reset HTML to plain text to select correct cursor position
-    var sel = window.getSelection();
-    var currP = document.getElementById('texteditor');
-    var currInnerText = currP.innerText;
-
-    let isEndOfSent = lastCurrPos >= currInnerText.length;
-
-    let normText = currInnerText.substr(0, lastCurrPos);
-    normText = VnHelpers.telexifyLastWord(normText);
-    normText = TypedText.normalizeText(normText, false);
-
-    let remain = currInnerText.substr(lastCurrPos,);
-    remain = TypedText.normalizeText(remain);
-
-    currInnerText = normText + remain;
-    lastCurrPos = normText.length;
-
-    let n = currInnerText.length;
-    if (isEndOfSent || lastCurrPos > n) {
-      lastCurrPos = n;
-    }
-    currP.firstChild.textContent = currInnerText;
-    console.log(`n=${n}, lastCurrPos=${lastCurrPos}\nnormText="${normText}", remain="${remain}"`);
-    collapse(sel, currP.firstChild, lastCurrPos);
-}
-
-
 export function blinkCurPos(pos) {
   var currP = document.getElementById(currSubIndex);
   if (!currP.firstChild) { return; }
@@ -126,9 +98,4 @@ export function blinkCurPos(pos) {
       collapse(sel, currP.firstChild, currPos);
     }
   }, 50);
-}
-
-function capitalizeFirstCharOf(sent) {
-  if (typeof sent !== "string") { return " "; }
-  return (sent[0] ?? "").toUpperCase() + sent.slice(1,);
 }
