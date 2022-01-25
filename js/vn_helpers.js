@@ -1,5 +1,3 @@
-import { _mappings } from "./vn_mappings.js"
-
 const WORD_VALID_CHARS = "1234567890qwertyuiopasdfghjklzxcvbnmàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđQWERTYUIOPASDFGHJKLZXCVBNMÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ";
 
 export const PHRASE_VALID_CHARS = WORD_VALID_CHARS + " ";
@@ -33,53 +31,6 @@ const vowelsMap = {
     "uw":"ư",
 }
 
-export function makeUseOfBiTriGramsFrom(txt) {
-    let phrases = txt.toLowerCase().split(VN_PHRASE_BREAK_REGEX);
-    phrases.forEach((phrase) => {
-        extractBiTriGrams(phrase);
-    });
-}
-
-function extractBiTriGrams(phrase) {
-    var w0 = "_", w1 = "_", s2, s3;
-    var words = phrase.trim().split(/\s+/);
-    words.forEach(w2 => {
-        s2 = `${w1} ${w2}`;
-        s3 = `${w0} ${s2}`;
-        w0 = w1; w1 = w2;
-        makeUseOfGram(s2);
-        makeUseOfGram(s3);
-    });
-}
-
-function makeUseOfGram(gram) {
-    if (gram.includes("_")) return;
-    // console.log(gram);
-    let key = removeMarks(gram);
-    let value = _mappings[key];
-    if (value && value.includes(gram)) {
-        // console.log(gram);
-        // console.log("=>", value);
-        value = value.replace(gram, "").replace("||","|").replace(/\|$/,"");
-        if (value.length === 0) {
-            _mappings[key] = gram;
-        } else {    
-            _mappings[key] = gram + "|" + value;
-        }
-            
-    } else {
-         value = value ? gram + "|" + value : gram;
-         value.replace(/\|$/,"");
-         _mappings[key] = value;
-        // console.log(_mappings[key]);
-    }
-}
-
-for (var k in vowelsMap) {
-    vowelsMap[k[0]+k[1].toUpperCase()] = vowelsMap[k];
-    vowelsMap[k[0].toUpperCase()+k[1]] = vowelsMap[k].toUpperCase();
-    vowelsMap[k.toUpperCase()] = vowelsMap[k].toUpperCase();
-}
 
 // window.tonesMap = tonesMap;
 for (var k in tonesMap) {
@@ -141,7 +92,7 @@ export function changeMark(s, mark) {
     let tone = _getTone(s);
     let unTone = _removeTone(s);
 
-    if (!"wq".includes(mark)) {
+    if (!"wqoeaz".includes(mark)) {
         return changeTone(unTone + mark, tone);
     }
 
@@ -152,7 +103,7 @@ export function changeMark(s, mark) {
     if (!m) { return s + mark; }
 
     // Invalid mark general checking
-    if ((mark !== "w" && mark !== "q")&& !m[2].includes(mark)) {
+    if ((mark !== "w" && mark !== "q") && !m[2].includes(mark)) {
         return s + mark;
     }
 
@@ -351,7 +302,7 @@ export function telexifyWord(w) {
         c = w[i];
         if ("sfrxj".includes(c)) {
             neww = changeTone(neww, c);
-        } else if ("daeowzq".includes(c)) {
+        } else if ("daeowqz".includes(c)) {
             neww = changeMark(neww, c);
         } else {
             neww += c;

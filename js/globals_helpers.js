@@ -9,10 +9,6 @@ const controlKeys = "Tab,Capslock,Enter,"+
     "ControlRight,AltRight,ShiftRight,OsRight,MetaRight"+
     "ArrowRight,ArrowLeft,ArrowUp,ArrowDown";
 
-function keepTwoDigitsAfterPeriod(f) {
-  return Math.round(f * 100) / 100;
-}
-
 // Make console.assert works on all platforms
 if (!console.assert) console.assert = function (x) {
   if (x !== true) console.log("Assertion fail!");

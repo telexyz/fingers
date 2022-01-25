@@ -1,4 +1,3 @@
-import * as TypedText from "./typed_text.js"
 import * as VnHelpers from "./vn_helpers.js"
 
 var lastCurrPos = 0;
