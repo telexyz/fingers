@@ -25,9 +25,9 @@ const tonesMap = {
 };
 
 const vowelsMap = {
-    "aa":"â", "aq":"â", "aw":"ă", 
-    "ee":"ê", "eq":"ê",
-    "oo":"ô", "oq":"ô", "ow":"ơ",
+    "aa":"â", "az":"â", "aw":"ă", 
+    "ee":"ê", "ez":"ê",
+    "oo":"ô", "oz":"ô", "ow":"ơ",
     "uw":"ư",
 }
 
@@ -40,7 +40,7 @@ for (var k in tonesMap) {
 export function changeTone(s, tone) {
     // console.log(s, tone);
     let ss = _removeTone(s);
-    if (tone === 'z')return ss;
+    if (tone === "q") return ss;
 
     let sss, m = ss.match(_syllLeft);
     if (!m) return s + tone;
@@ -74,7 +74,7 @@ assertEqual(changeTone("tuyền","f"), "tuyênf");
 assertEqual(changeTone("thuổng","s"), "thuống");
 assertEqual(changeTone("kiếm","j"), "kiệm");
 assertEqual(changeTone("thươngx","x"), "thưỡngx");
-assertEqual(changeTone("kiếm","z"), "kiêm");
+assertEqual(changeTone("kiếm","q"), "kiêm");
 assertEqual(changeTone("ươ","r"), "ưở");
 assertEqual(changeTone("khuâng","r"), "khuẩng");
 assertEqual(changeTone("ươi","f"),"ười");
@@ -92,18 +92,20 @@ export function changeMark(s, mark) {
     let tone = _getTone(s);
     let unTone = _removeTone(s);
 
-    if (!"wqoeaz".includes(mark)) {
+    if (!"qwzoea".includes(mark)) {
         return changeTone(unTone + mark, tone);
     }
 
     let naked = removeMarks(unTone, 'keep đ/Đ');
+    if (mark === "q") { return naked; }
+ 
     // console.log('changeMark:', s, tone, naked, mark);
 
     let m = naked.match(_syllLeft);
     if (!m) { return s + mark; }
 
     // Invalid mark general checking
-    if ((mark !== "w" && mark !== "q") && !m[2].includes(mark)) {
+    if ((mark !== "w") && !m[2].includes(mark)) {
         return s + mark;
     }
 
@@ -156,10 +158,10 @@ assertEqual(changeMark("cua","w"), "cưa");
 assertEqual(changeMark("cửa","a"), "cuẩ");
 assertEqual(changeMark("tuyền","e"), "tuyène");
 assertEqual(changeMark("thuổng","w"), "thưởng");
-assertEqual(changeMark("thuổng","z"), "thuong");
+assertEqual(changeMark("thuổng","q"), "thuong");
 assertEqual(changeMark("kiếm","e"), "kiéme");
 assertEqual(changeMark("thương","o"), "thuông");
-assertEqual(changeMark("kiếm","z"), "kiem");
+assertEqual(changeMark("kiếm","q"), "kiem");
 assertEqual(changeMark("khuang","w"), "khưang");
 assertEqual(changeMark("ươi","w"),"uoiw");
 assertEqual(changeMark("khong","o"),"không");
@@ -171,9 +173,9 @@ function _getTone(s) {
     if (s.match(/ả|ẳ|ẩ|ỏ|ở|ổ|ủ|ử|ẻ|ể|ỉ|ỷ/i)) return 'r';
     if (s.match(/ã|ẵ|ẫ|õ|ỡ|ỗ|ũ|ữ|ẽ|ễ|ĩ|ỹ/i)) return 'x';
     if (s.match(/ạ|ặ|ậ|ọ|ợ|ộ|ụ|ự|ẹ|ệ|ị|ỵ/i)) return 'j';
-    return 'z';
+    return 'q';
 }
-assertEqual(_getTone("an"),"z");
+assertEqual(_getTone("an"),"q");
 assertEqual(_getTone("ẩn"),"r");
 
 function _removeTone(s) {
@@ -300,9 +302,9 @@ export function telexifyWord(w) {
     let neww = w[0], i = 1, n = w.length, c;
     for (; i < n; i++) {
         c = w[i];
-        if ("sfrxj".includes(c)) {
+        if ("sfrxjq".includes(c)) {
             neww = changeTone(neww, c);
-        } else if ("daeowqz".includes(c)) {
+        } else if ("daeow".includes(c)) {
             neww = changeMark(neww, c);
         } else {
             neww += c;
