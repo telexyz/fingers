@@ -26,13 +26,13 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 * Selected n-gram (31.7 MB of 2,3,4-gram tinh gọn)
 * Neural Network (ONNX Runtime Web)
 
-## Module 3a/ Làm giao diện web để có đất thử nghiệm bộ gõ
+## Module 3a/ Bộ gõ telex cải tiến trên nền web
 
 [>> DOING <<]
 
-* Sử dụng thread? https://web.dev/webassembly-threads
+* Hiện lựa chọn tiếng Việt và nguyên gốc `[more|moẻ]` double space để lựa chọn nguyên gốc
 
-* Xây dựng bộ gõ Telex cải tiến, dùng lại 1 phần code của `stp/e`
+* Dùng q để bỏ dấu ô â ê
 
 [>> DONE <<]
 
