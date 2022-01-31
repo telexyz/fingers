@@ -18,13 +18,12 @@ Tham khảo UI/UX https://languagetool.org/editor/new
 > contrast to large game engines, which can be daunting and distracting.
 https://wasm4.org/docs/#why-wasm-4
 
-__NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó trôi nên cần sử dụng những models có dung lượng nhỏ (vài tới vài chục MB). Full n-gram chiếm vài trăm MB không còn thích hợp. Các lựa chọn khác bao gồm:
+__NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó trôi nên cần sử dụng những models có dung lượng nhỏ. Full n-gram chiếm vài trăm MB không còn thích hợp. Các lựa chọn khác bao gồm:
 
-* Pattern matching (vài trăm kb filter)
+* Pattern matching (dùng filter chiếm vài trăm kb)
 * Rule-based (hard-coded)
 * Pointwise (SVM, tree/forest ...)
 * Selected n-gram (31.7 MB of 2,3,4-gram tinh gọn)
-* Neural network (ONNX Runtime Web)
 
 ## Module 3a/ Bộ gõ telex cải tiến trên nền web
 
