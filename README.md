@@ -79,14 +79,8 @@ Thống kê từ điển thấy rằng từ tiếng Việt bao gồm:
 * `16%` một âm tiết
 * `71%` hai âm tiết
 * `13%` là 3+ âm tiết
-Nếu bỏ từ một âm tiết, thì số lượng 3+ âm tiết chiếm khoảng 15% (13 / 84)
 
-Thống kê file [`engine/dict/wordlist.txt`](https://github.com/binhvq/vietdict106k)
-* `64_220` từ 2 âm tiết
-* `14_786` từ 3 âm tiết
-* `10_258` từ 4 âm tiết
-* ` 3_555`   +5 âm tiết
-Số lượng 3+ âm tiết chiếm 27.7% (25k / 90k)
+Nếu bỏ từ một âm tiết, thì số lượng 3+ âm tiết chiếm khoảng 15%.
 
 => _Cần dùng 2 data-structures để lưu dict (khoảng 100k từ):_
 
