@@ -1,6 +1,6 @@
 # Deploy to Wasm
 
-UI tham khảo https://languagetool.org/editor/new
+Tham khảo UI/UX https://languagetool.org/editor/new
 
 ### Getting started
 
