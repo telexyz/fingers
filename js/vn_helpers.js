@@ -1,3 +1,19 @@
+// Make console.assert works on all platforms
+if (!console.assert) console.assert = function (x) {
+if (x !== true) console.log("Assertion fail!");
+return x;
+}
+
+function assertEqual(x, y) {
+let condition = x === y;
+console.assert(condition);
+if (!condition) {
+  console.log(x, "!==", y);
+}
+};
+
+const isMobileDevice = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);  
+
 const WORD_VALID_CHARS = "1234567890qwertyuiopasdfghjklzxcvbnmàáạảãâầấậẩẫăằắặẳẵèéẹẻẽêềếệểễìíịỉĩòóọỏõôồốộổỗơờớợởỡùúụủũưừứựửữỳýỵỷỹđQWERTYUIOPASDFGHJKLZXCVBNMÀÁẠẢÃÂẦẤẬẨẪĂẰẮẶẲẴÈÉẸẺẼÊỀẾỆỂỄÌÍỊỈĨÒÓỌỎÕÔỒỐỘỔỖƠỜỚỢỞỠÙÚỤỦŨƯỪỨỰỬỮỲÝỴỶỸĐ";
 
 export const PHRASE_VALID_CHARS = WORD_VALID_CHARS + " ";

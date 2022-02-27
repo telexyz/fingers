@@ -1,3 +1,5 @@
+const FROM_VIRTUAL_BUTTON = "FROM_VIRTUAL_BUTTON";
+
 import * as VnHelpers from "./vn_helpers.js"
 
 var lastCurrPos = 0;

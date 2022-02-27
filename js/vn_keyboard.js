@@ -1,3 +1,8 @@
+const controlKeys = "Tab,Capslock,Enter,"+
+  "ControlLeft,AltLeft,ShiftLeft,OsLeft,MetaLeft"+
+  "ControlRight,AltRight,ShiftRight,OsRight,MetaRight"+
+  "ArrowRight,ArrowLeft,ArrowUp,ArrowDown";
+
 import * as CursorHelpers from "./cursor_helpers.js"
 import * as VnHelpers from "./vn_helpers.js"
 
