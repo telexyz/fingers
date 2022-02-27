@@ -76,21 +76,11 @@ __NOTE__: Bộ nhớ wasm nhỏ, nền web, data bự load xuống local khó tr
 ### 3c.1: Dữ liệu từ điển âm tiết tiếng Việt
 
 Thống kê từ điển thấy rằng từ tiếng Việt bao gồm: 
-
 * `16%` một âm tiết
 * `71%` hai âm tiết
 * `13%` là 3+ âm tiết
-Nếu bỏ từ một âm tiết, thì số lượng 3+ âm tiết chiếm khoảng 15% (13 / 84)
 
-Thống kê file [`engine/dict/wordlist.txt`](https://github.com/binhvq/vietdict106k)
-(mỗi âm tiết cần `u16` (2-bytes) để lưu trữ)
-
-* `64_220` từ 2 âm tiết = 64k * 4-bytes = `256kb`
-* `14_786` từ 3 âm tiết = 15k * 6-bytes = ` 90kb`
-* `10_258` từ 4 âm tiết = 10k * 8-bytes = ` 80kb`
-* ` 3_555`   +5 âm tiết					  - - - -
-						    		TOTAL `426KB` (file gốc 1.4MB)
-Số lượng 3+ âm tiết chiếm 27.7% (25k / 90k)
+Nếu bỏ từ một âm tiết, thì số lượng 3+ âm tiết chiếm khoảng 15%.
 
 => _Cần dùng 2 data-structures để lưu dict (khoảng 100k từ):_
 
