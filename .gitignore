@@ -6,3 +6,4 @@ dist-ssr
 .gyro
 zig-cache
 zig-out
+bun.lockb
